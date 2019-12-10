@@ -5,23 +5,20 @@
     {
       "id": "4007873252235",
       "name": "BAMBUSSTAB",
-      "number": 1.0,
-      "price": 0.99,
-      "currency": "EUR"
+      "quantity": 1,
+      "price": 99
     },
     {
       "id": "4007873168109",
       "name": "Sprüher",
-      "number": 1.0,
-      "price": 1.99,
-      "currency": "EUR"
+      "quantity": 1,
+      "price": 99
     },
     {
       "id": "4007872908690",
       "name": "SPANPLATTENSCHRAUBEN",
-      "number": 1.0,
-      "price": 0.99,
-      "currency": "EUR"
+      "quantity": 2,
+      "price": 199
     }
   ]
 }
