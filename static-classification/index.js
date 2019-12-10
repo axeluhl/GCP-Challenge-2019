@@ -22,5 +22,14 @@ exports.classify = async (req, res) => {
 };
 
 function tryToClassify(item) {
-  item.category = "Unknown";
+  let name = item.name;
+  if (name.match(/Bambusstab/i)) {
+    item.category = "Gärtnereibedarf";
+  } else if (name.match(/Sprüher/i)) {
+    item.category = "Bastelbedarf";
+  } else if (name.match(/Spanplattenschrauben/i)) {
+    item.category = "Eisenwaren";
+  } else {
+    item.category = "Unknown";
+  }
 }
