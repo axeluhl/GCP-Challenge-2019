@@ -1,0 +1,16 @@
+{
+  "name": "gcp-dev-challenge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "product-classification.js",
+  "dependencies": {
+    "@google-cloud/functions-framework": "^1.3.2",
+    "@google-cloud/language": "^3.6.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
