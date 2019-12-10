@@ -4,10 +4,8 @@
  * @param {Express.Request} req The API request.
  * @param {Express.Response} res The API response.
  */
-exports.listGoogleAPIs = async (req, res) => {
-    let sum = 0;
-    for (let i = 0; i < 10; ++i) {
-      sum += i;
-    }
-    res.send({ sum });
-  };
+exports.classify = async (req, res) => {
+    let store = req.body.store;
+    let items = req.body.items;
+    res.send({ "number-of-items": items.length });
+};
