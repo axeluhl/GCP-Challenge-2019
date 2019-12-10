@@ -7,5 +7,12 @@
 exports.classify = async (req, res) => {
     let store = req.body.store;
     let items = req.body.items;
-    res.send({ "number-of-items": items.length });
+    for (let i=0; i<items.length; i++) {
+      tryToClassify(items[i]);
+    }
+    res.send(req.body);
 };
+
+function tryToClassify(item) {
+  item.category = "Unknown";
+}
