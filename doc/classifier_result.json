@@ -1,9 +1,34 @@
 {
-  "store":"OBI GmbH & Co.Deutschland KG",
-  "date":"2019-08-21T16:34:13+0200",
-  "items":[
-      {"id":"4007873252235","name":"BAMBUSSTAB","quantity":1,"price":99,"category":"Unknown", "categoryconfidence":0.22},
-      {"id":"4007873168109","name":"Sprüher","quantity":1,"price":199,"category":"Unknown", "categoryconfidence":0.99},
-      {"id":"4007872908690","name":"SPANPLATTENSCHRAUBEN","quantity":1,"price":99,"category":"Unknown", "categoryconfidence":0.89}
+  "receipt_id": "UUID",
+  "store": "OBI GmbH & Co.Deutschland KG",
+  "date": "2019-08-21T16:34:13+0200",
+  "items": [
+    {
+      "item_id": "UUID",
+      "ean": "4007873252235",
+      "name": "BAMBUSSTAB",
+      "quantity": 1,
+      "price": 99,
+      "category": "Unknown",
+      "categoryconfidence": 0.22
+    },
+    {
+      "item_id": "UUID",
+      "ean": "4007873168109",
+      "name": "Sprüher",
+      "quantity": 1,
+      "price": 199,
+      "category": "Unknown",
+      "categoryconfidence": 0.99
+    },
+    {
+      "item_id": "UUID",
+      "ean": "4007872908690",
+      "name": "SPANPLATTENSCHRAUBEN",
+      "quantity": 1,
+      "price": 99,
+      "category": "Unknown",
+      "categoryconfidence": 0.89
+    }
   ]
 }
