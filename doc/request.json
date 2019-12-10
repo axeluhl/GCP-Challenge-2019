@@ -1,0 +1,27 @@
+{
+  "store": "OBI GmbH & Co.Deutschland KG",
+  "date": "2019-08-21T16:34:13+0200",
+  "items": [
+    {
+      "id": "4007873252235",
+      "name": "BAMBUSSTAB",
+      "number": 1.0,
+      "price": 0.99,
+      "currency": "EUR"
+    },
+    {
+      "id": "4007873168109",
+      "name": "Sprüher",
+      "number": 1.0,
+      "price": 1.99,
+      "currency": "EUR"
+    },
+    {
+      "id": "4007872908690",
+      "name": "SPANPLATTENSCHRAUBEN",
+      "number": 1.0,
+      "price": 0.99,
+      "currency": "EUR"
+    }
+  ]
+}
