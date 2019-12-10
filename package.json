@@ -1,0 +1,25 @@
+{
+  "name": "gcp-challenge-2019",
+  "version": "1.0.0",
+  "description": "GCP Challenge 2019",
+  "main": "classifier.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/axeluhl/GCP-Challenge-2019.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/axeluhl/GCP-Challenge-2019/issues"
+  },
+  "homepage": "https://github.com/axeluhl/GCP-Challenge-2019#readme",
+  "dependencies": {
+    "@google-cloud/functions-framework": "^1.3.2"
+  }
+}
