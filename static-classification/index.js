@@ -7,10 +7,14 @@
 exports.classify = async (req, res) => {
     let store = req.body.store;
     let items = req.body.items;
-    for (let i=0; i<items.length; i++) {
-      tryToClassify(items[i]);
+    if (req.body.store && req.body.items) {
+      for (let i=0; i<items.length; i++) {
+        tryToClassify(items[i]);
+      }
+      res.send(req.body);
+    } else {
+      res.status(400).send("store and/or items attribute missing in body");
     }
-    res.send(req.body);
 };
 
 function tryToClassify(item) {
