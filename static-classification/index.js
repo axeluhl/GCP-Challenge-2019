@@ -25,11 +25,15 @@ function tryToClassify(item) {
   let name = item.name;
   if (name.match(/Bambusstab/i)) {
     item.category = "Gärtnereibedarf";
+    item.categoryconfidence = 0.5;
   } else if (name.match(/Sprüher/i)) {
     item.category = "Bastelbedarf";
+    item.categoryconfidence = 0.5;
   } else if (name.match(/Spanplattenschrauben/i)) {
     item.category = "Eisenwaren";
+    item.categoryconfidence = 0.5;
   } else {
     item.category = "Unknown";
+    item.categoryconfidence = 0.0;
   }
 }
