@@ -11,7 +11,12 @@ const options = {
 const bigquery = new BigQuery(options);
 
 function errorHandling(e) {
-    console.warn("error inserting data", e)
+    if (e.errors instanceof Array) {
+        e.errors.forEach((error) => {
+            console.warn("error inserting data: ", error)
+        })
+    } else
+        console.warn("error inserting data: ", e)
 }
 
 async function insertRowsAsStream(data) {
@@ -35,13 +40,13 @@ store 	                STRING 	    NULLABLE 	Name of the store
 bill_id 	            STRING 	    NULLABLE 	UUID
 id 	                    STRING 	    NULLABLE 	UUID
  */
-function transformData(data){
+function transformData(data) {
     return data.items.map((row) => {
             return {
                 date: new Date(Date.parse(data.date)).toISOString().slice(0, 19).replace('T', ' '),
                 article: row.name,
-                category: row.category,
-                category_confidence: row.categoryconfidence,
+                category: row.category || "unknown",
+                category_confidence: row.categoryconfidence || 0.0,
                 price: row.price,
                 store: data.store,
                 bill_id: data.receipt_id,
