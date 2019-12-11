@@ -1,15 +1,12 @@
+const language = require('@google-cloud/language');
+const { PubSub } = require('@google-cloud/pubsub');
+const https = require('https');
+
 async function classify(text) {
     // Imports the Google Cloud client library
-    const language = require('@google-cloud/language');
-    // const fs = require('fs');
-
-    // const text = fs.readFileSync("example.txt", "utf8");
 
     // Instantiates a client
     const client = new language.LanguageServiceClient();
-
-    // The text to analyze
-    // const text = 'Hello, world!';
 
     const document = {
         content: text,
@@ -17,22 +14,41 @@ async function classify(text) {
     };
 
     // Detects the sentiment of the text
-    const [classification] = await client.classifyText({ document });
+    try {
+        const [classification] = await client.classifyText({ document });        
+    } catch (error) {
+        return {
+            category: "unknown",
+            confidence: 0
+        }
+    }
+
     console.log('Categories:');
     classification.categories.forEach(category => {
         console.log(`Name: ${category.name}, Confidence: ${category.confidence}`);
     });
 
-    return classification.categories;
+    return classification.categories[0];
 }
 
+exports.productClassification = async (event, context) => {
+    const pubsubMessage = event.message.data;
+    console.log(JSON.stringify(event));
+    let items = pubsubMessage.items;
 
-exports.productClassification = (req, res) => {
-    let text = req.query.text || req.body.text;
+    const pubsub = new PubSub({ projectId: "hackathon-sap19-wal-1009" });
+    const topic = await pubsub.topic("classification_result");
 
-    const classifications = classify(text);
+    var pClassifications = items.map(item => {
+        return classify(item.name)
+            .then(classification => {
+                item.category = classification.category;
+                item.categoryconfidence = classification.confidence;
+                topic.publishJSON(item);
+            });
+    });
 
-    classifications.then(classif => {
-        res.status(200).send(JSON.stringify(classif));
-    })
+    await pClassifications;
+
+    res.status(200).send();
 };
