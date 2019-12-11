@@ -53,6 +53,27 @@
       "price": 199
     },
     {
+      "item_id": "1b6a7488-2b09-44ef-8332-f6856bd1a75a",
+      "ean": "50192",
+      "name": "QS Mini-Romarispen",
+      "quantity": 1,
+      "price": 169
+    },
+    {
+      "item_id": "1b6a7468-2b07-44ef-8332-f6856bd1a75a",
+      "ean": "32991",
+      "name": "Bio Pflücksalat",
+      "quantity": 1,
+      "price": 129
+    },
+    {
+      "item_id": "3b6a7488-2b07-44ef-8332-f6856bd1a75a",
+      "ean": "49306",
+      "name": "Ecolabel WC-Reinig",
+      "quantity": 1,
+      "price": 95
+    },
+    {
       "item_id": "506339ff-ec7f-4a02-a4d9-aa6b4f733967",
       "ean": "9007",
       "name": "Mehrfruchtdirektsa",
