@@ -32,9 +32,10 @@ async function classify(text) {
 }
 
 exports.productClassification = async (event, context) => {
-    const pubsubMessage = event.message.data;
     console.log(JSON.stringify(event));
-    let items = pubsubMessage.items;
+    const pubsubMessageData = event.data;
+    let payload = JSON.parse(Buffer.from(pubsubMessageData, 'base64').toString());
+    let items = payload.items || [];
 
     const pubsub = new PubSub({ projectId: "hackathon-sap19-wal-1009" });
     const topic = await pubsub.topic("classification_result");
@@ -49,6 +50,4 @@ exports.productClassification = async (event, context) => {
     });
 
     await pClassifications;
-
-    res.status(200).send();
 };
