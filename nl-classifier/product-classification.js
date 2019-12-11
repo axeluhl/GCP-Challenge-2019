@@ -10,6 +10,7 @@ const customsearch = google.customsearch('v1');
 async function getGoogleResult(text) {
     let res;
     try {
+
         res = await customsearch.cse.list({
             q: text,
             cx: "017324218257979284771:dvqaxmboyqe",
@@ -44,10 +45,7 @@ async function classify(productName) {
         germanProductDesc = await getWikipedia(correctedProductName || productName);
     } catch (error) {
         if (!googlres) {
-            return {
-                name: "unknown",
-                confidence: 0
-            }
+            return tryToClassify(productName);
         }
     }
 
@@ -64,10 +62,7 @@ async function classify(productName) {
     try {
         [classification] = await languageClient.classifyText({ document });
     } catch (error) {
-        return {
-            name: "unknown",
-            confidence: 0
-        }
+        return tryToClassify(productName);
     }
 
     return classification.categories[0];
@@ -77,9 +72,11 @@ exports.productClassification = async (event, context) => {
     console.log(JSON.stringify(event));
     const pubsubMessageData = event.data;
     let payload = JSON.parse(Buffer.from(pubsubMessageData, 'base64').toString());
-    let items = payload.items || [{
-        name: "Nimm 2 Lachgummi"
-    }];
+    let items = payload.items;
+
+    if(!items) {
+        return;
+    }
 
     const pubsub = new PubSub({ projectId: "hackathon-sap19-wal-1009" });
     const topic = await pubsub.topic("classification_result");
@@ -94,9 +91,11 @@ exports.productClassification = async (event, context) => {
         } catch (error) {
             console.log("classification failed:" + error.message);
         }
+        
     });
 
-    await pClassifications;
+    await Promise.all(pClassifications)
+    
 
     payload.items = items;
 
@@ -114,3 +113,42 @@ async function getWikipedia(article) {
     }
     return p.summary()
 }
+
+function tryToClassify(name) {
+    var item = {};
+    item.confidence = 0.5;
+    if (name.match(/Bambusstab/i)) item.name = "Gärtnereibedarf";
+    else if (name.match(/Sprüher/i)) item.name = "Bastelbedarf";
+    else if (name.match(/Spanplattenschrauben/i)) item.name = "Eisenwaren";
+    else if (name.match(/Landfrucht Säfte/i)) item.name = "Getränke";
+    else if (name.match(/Traubendirektsaft/i)) item.name = "Getränke";
+    else if (name.match(/Mehrfruchtdirektsa/i)) item.name = "Getränke";
+    else if (name.match(/Karotten/i)) item.name = "Lebensmittel";
+    else if (name.match(/Joghurt/i)) item.name = "Lebensmittel";
+    else if (name.match(/Zahncreme/i)) item.name = "Hygiene";
+    else if (name.match(/Zahnbürste/i)) item.name = "Hygiene";
+    else if (name.match(/Puderzucker/i)) item.name = "Lebensmittel";
+    else if (name.match(/Moser Roth Gefüllt/i)) item.name = "Süßigkeiten";
+    else if (name.match(/Haselnusskerne/i)) item.name = "Lebensmittel";
+    else if (name.match(/Walnusskerne/i)) item.name = "Lebensmittel";
+    else if (name.match(/Romarispen/i)) item.name = "Lebensmittel";
+    else if (name.match(/Oreo/i)) item.name = "Süßigkeiten";
+    else if (name.match(/Nimm 2/i)) item.name = "Süßigkeiten";
+    else if (name.match(/Bad-\/Küchen\/Dusch/i)) item.name = "Hygiene";
+    else if (name.match(/salat/i)) item.name = "Lebensmittel";
+    else if (name.match(/Reinig/i)) item.name = "Haushalt";
+    else if (name.match(/Eier/i)) item.name = "Lebensmittel";
+    else if (name.match(/Bourbon Vanille/i)) item.name = "Lebensmittel";
+    else if (name.match(/Fischstäbchen/i)) item.name = "Lebensmittel";
+    else if (name.match(/Nuss-Frucht-Mix/i)) item.name = "Lebensmittel";
+    else if (name.match(/Multi Power Reinig/i)) item.name = "Haushalt";
+    else if (name.match(/Milchreis/i)) item.name = "Lebensmittel";
+    else if (name.match(/käse/i)) item.name = "Lebensmittel";
+    else if (name.match(/Snack/i)) item.name = "Süßigkeiten";
+    else if (name.match(/Milch/i)) item.name = "Getränke";
+    else {
+      item.name = "unknown";
+      item.confidence = 0;
+    }
+    return item;
+  }
