@@ -4,6 +4,24 @@ const https = require('https');
 const wiki = require('wikijs').default;
 const { Translate } = require('@google-cloud/translate').v2;
 const translate = new Translate({ projectId: "hackathon-sap19-wal-1009" });
+const { google } = require('googleapis');
+const customsearch = google.customsearch('v1');
+
+async function getGoogleResult(text) {
+    let res;
+    try {
+        res = await customsearch.cse.list({
+            q: text,
+            cx: "017324218257979284771:dvqaxmboyqe",
+            auth: "AIzaSyC7flbY3Iz-kWSeaeWztDO4PQaEDCldbN8",
+            lr: "lang_de"
+        });
+    } catch (error) {
+        console.log("google search error:" + error.message);
+        return [undefined, undefined];
+    }
+    return [res.data.items && res.data.items[0].snippet, res.data.spelling && res.data.spelling.correctedQuery];
+}
 
 async function translateToEnglish(text) {
     const target = 'en';
@@ -14,17 +32,26 @@ async function translateToEnglish(text) {
 
 async function classify(productName) {
 
+    var googlres, correctedProductName;
+    try {
+        [googlres, correctedProductName] = await getGoogleResult(productName);
+    } catch (error) {
+        googlres = undefined;
+    }
     // Instantiates a client
     let germanProductDesc;
     try {
-        germanProductDesc = await getWikipedia(productName);
+        germanProductDesc = await getWikipedia(correctedProductName || productName);
     } catch (error) {
-        return {
-            name: "unknown",
-            confidence: 0
+        if (!googlres) {
+            return {
+                name: "unknown",
+                confidence: 0
+            }
         }
     }
-    const englishProductDescription = await translateToEnglish(germanProductDesc);
+
+    const englishProductDescription = await translateToEnglish(germanProductDesc || googlres);
 
     const document = {
         content: englishProductDescription,

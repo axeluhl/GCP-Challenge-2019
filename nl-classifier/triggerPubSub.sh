@@ -1,4 +1,4 @@
-curl -d "@../doc/ocr_result_as_pubsub_event.json" -X POST \
+curl -d "@../doc/ocr_result_2_as_pubsub_event.json" -X POST \
   -H "Ce-Type: true" \
   -H "Ce-Specversion: true" \
   -H "Ce-Source: true" \
