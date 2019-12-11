@@ -14,26 +14,38 @@ function errorHandling(e) {
     console.warn("error inserting data", e)
 }
 
-
 async function insertRowsAsStream(data) {
     await bigquery
         .dataset(datasetId)
         .table(tableId)
         .insert(data).then(() => {
-            console.log(`Inserted ${data.items.length} rows`);
+            console.log(`Inserted ${data.length} rows`);
         }).catch(errorHandling)
 }
 
-function transformData(data) {
+/*
+
+Field name 	            Type 	    Mode 	Description
+date 	                TIMESTAMP 	NULLABLE
+article 	            STRING 	    NULLABLE
+category 	            STRING 	    NULLABLE
+category_confidence 	FLOAT 	    NULLABLE
+price 	                NUMERIC 	NULLABLE 	in euro cent
+store 	                STRING 	    NULLABLE 	Name of the store
+bill_id 	            STRING 	    NULLABLE 	UUID
+id 	                    STRING 	    NULLABLE 	UUID
+ */
+function transformData(data){
     return data.items.map((row) => {
             return {
-                date: data.date,
+                date: new Date(Date.parse(data.date)).toISOString().slice(0, 19).replace('T', ' '),
+                article: row.name,
+                category: row.category,
+                category_confidence: row.categoryconfidence,
+                price: row.price,
                 store: data.store,
                 bill_id: data.receipt_id,
-                item_id: row.item_id,
-                category: row.category,
-                categoryconfidence: row.categoryconfidence,
-                price: row.price
+                id: row.item_id,
             }
         }
     )
