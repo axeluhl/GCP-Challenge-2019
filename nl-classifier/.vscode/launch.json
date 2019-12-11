@@ -7,7 +7,7 @@
       "name": "Attach",
       "port": 9229,
       "env": {
-        "GOOGLE_APPLICATION_CREDENTIALS": "/c/Users/D072830/gcp-credentials.json"
+        "GOOGLE_APPLICATION_CREDENTIALS": "../../gcp-credentials.json"
       },
       "runtimeExecutable": "npm",
       "runtimeArgs": [
