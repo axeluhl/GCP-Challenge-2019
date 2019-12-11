@@ -15,9 +15,16 @@ async function translateToEnglish(text) {
 async function classify(productName) {
 
     // Instantiates a client
-    const germanProductDesc = await getWikipedia(productName);
+    let germanProductDesc;
+    try {
+        germanProductDesc = await getWikipedia(productName);
+    } catch (error) {
+        return {
+            name: "unknown",
+            confidence: 0
+        }
+    }
     const englishProductDescription = await translateToEnglish(germanProductDesc);
-
 
     const document = {
         content: englishProductDescription,
@@ -31,15 +38,10 @@ async function classify(productName) {
         [classification] = await languageClient.classifyText({ document });
     } catch (error) {
         return {
-            category: "unknown",
+            name: "unknown",
             confidence: 0
         }
     }
-
-    console.log('Categories:');
-    classification.categories.forEach(category => {
-        console.log(`Name: ${category.name}, Confidence: ${category.confidence}`);
-    });
 
     return classification.categories[0];
 }
@@ -49,25 +51,39 @@ exports.productClassification = async (event, context) => {
     const pubsubMessageData = event.data;
     let payload = JSON.parse(Buffer.from(pubsubMessageData, 'base64').toString());
     let items = payload.items || [{
-        name: "Milch"
+        name: "Nimm 2 Lachgummi"
     }];
 
     const pubsub = new PubSub({ projectId: "hackathon-sap19-wal-1009" });
     const topic = await pubsub.topic("classification_result");
 
     var pClassifications = items.map(async item => {
-        let classification = await classify(item.name);
-        item.category = classification.category;
-        item.categoryconfidence = classification.confidence;
-        let messageID = await topic.publishJSON(item);
-        console.log(`Message published: ${messageID} product: ${item.name} category: ${item.category} confidence: ${item.categoryconfidence}`)
-        return messageID;
+        try {
+            let classification = await classify(item.name);
+            item.category = classification.name;
+            item.categoryconfidence = classification.confidence;
+            console.log(`classified: product: ${item.name} category: ${item.category} confidence: ${item.categoryconfidence}`)
+
+        } catch (error) {
+            console.log("classification failed:" + error.message);
+        }
     });
 
     await pClassifications;
+
+    payload.items = items;
+
+    let messageID = await topic.publishJSON(payload);
 };
 
 async function getWikipedia(article) {
-    var p = await wiki({ apiUrl: 'https://de.wikipedia.org/w/api.php' }).page(article)
+    var p;
+    try {
+        p = await wiki({ apiUrl: 'https://de.wikipedia.org/w/api.php' }).page(article)
+    } catch (error) {
+        let searchResults = await wiki({ apiUrl: 'https://de.wikipedia.org/w/api.php' }).search(article, 1);
+        p = await wiki({ apiUrl: 'https://de.wikipedia.org/w/api.php' }).page(searchResults.results[0]);
+        console.log(`${article} matched to ${searchResults.results[0]}`);
+    }
     return p.summary()
 }
