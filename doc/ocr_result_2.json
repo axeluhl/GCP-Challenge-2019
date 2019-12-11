@@ -32,6 +32,27 @@
       "price": 60
     },
     {
+      "item_id": "1b6a7488-2b07-44ef-8342-f6823bd1a75a",
+      "ean": "700828",
+      "name": "Moser Roth Gefüllt",
+      "quantity": 1,
+      "price": 139
+    },
+    {
+      "item_id": "1b6a7488-2b07-44ef-8332-f6990bd1a75a",
+      "ean": "12909",
+      "name": "Haselnusskerne geh",
+      "quantity": 1,
+      "price": 159
+    },
+    {
+      "item_id": "1b6a7488-2b07-44ef-8332-f6856bd1a75a",
+      "ean": "6124",
+      "name": "Walnusskerne",
+      "quantity": 1,
+      "price": 199
+    },
+    {
       "item_id": "506339ff-ec7f-4a02-a4d9-aa6b4f733967",
       "ean": "9007",
       "name": "Mehrfruchtdirektsa",
