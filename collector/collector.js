@@ -14,29 +14,35 @@ function errorHandling(e) {
     console.warn("error inserting data", e.errors.map((row) => row.errors))
 }
 
-exports.classificationCollector = (event, context) => {
-    const pubsubMessage = event.data;
-    console.log(Buffer.from(pubsubMessage, 'base64').toString());
-};
 
-
-
-async function insertRowsAsStream(rows) {
-    rows.map((row) => classify(row.article))
+async function insertRowsAsStream(data) {
     await bigquery
         .dataset(datasetId)
         .table(tableId)
         .insert([]).then(() => {
-            console.log(`Inserted ${rows.length} rows`);
+            console.log(`Inserted ${data.items.length} rows`);
         }).catch(errorHandling)
 }
 
-const dataset = [
-    {date: '2019-12-05 16:46:30', article: "PUTENBRUST", price: 289},
-    {date: '2019-12-05 16:46:30', article: "BIO SCHINK.WURST", price: 129},
-    {date: '2019-12-05 16:46:30', article: "GERAMONT SCHB.", price: 249},
-    {date: '2019-12-05 16:46:30', article: "JA! MEDIUM 6x1,5", price: 114},
-    {date: '2019-12-05 16:46:30', article: "PFAND 1,50 EURO", price: 150},
-    {date: '2019-12-05 16:46:30', article: "JA! BACKPAPIERZ", price: 95},
-];
-insertRowsAsStream(dataset);
+function transformData(data) {
+    data.items.map((row) => {
+            return {
+                date: data.date,
+                store: data.store,
+                bill_id: data.receipt_id,
+                item_id: row.item_id,
+                category: row.category,
+                categoryconfidence: row.categoryconfidence,
+                price: row.price
+            }
+        }
+    )
+}
+
+exports.classificationCollector = (event, context) => {
+    const pubsubMessage = event.data;
+    const data = JSON.parse(Buffer.from(pubsubMessage, 'base64').toString());
+
+    console.log(data, transformData(data));
+    insertRowsAsStream(transformData(data));
+};
