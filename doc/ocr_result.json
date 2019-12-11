@@ -1,24 +1,24 @@
 {
-  "receipt_id": "UUID",
+  "receipt_id": "b968f45e-007f-4f80-ab11-a0383b6145f1",
   "store": "OBI GmbH & Co.Deutschland KG",
   "date": "2019-08-21T16:34:13+0200",
   "items": [
     {
-      "item_id": "UUID",
+      "item_id": "3db9508a-8fc0-43c9-9213-dba9317e9135",
       "ean": "4007873252235",
       "name": "BAMBUSSTAB",
       "quantity": 1,
       "price": 99
     },
     {
-      "item_id": "UUID",
+      "item_id": "c0e34125-8705-4ada-82ac-778f8345ca87",
       "ean": "4007873168109",
       "name": "Sprüher",
       "quantity": 1,
       "price": 99
     },
     {
-      "item_id": "UUID",
+      "item_id": "2b502463-f9cb-4d7e-a822-8ba364170d73",
       "ean": "4007872908690",
       "name": "SPANPLATTENSCHRAUBEN",
       "quantity": 2,
