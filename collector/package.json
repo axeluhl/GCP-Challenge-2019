@@ -1,6 +1,10 @@
 {
   "dependencies": {
-    "@google-cloud/bigquery": "^4.5.0"
+    "@google-cloud/bigquery": "^4.5.0",
+    "@google-cloud/functions-framework": "^1.3.2"
+  },
+  "scripts": {
+    "start": "node --inspect node_modules/@google-cloud/functions-framework --target=classificationCollector --signature-type=event"
   },
   "main": "collector.js"
 }
