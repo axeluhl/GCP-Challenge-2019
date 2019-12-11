@@ -1,6 +1,7 @@
 const language = require('@google-cloud/language');
 const { PubSub } = require('@google-cloud/pubsub');
 const https = require('https');
+const wiki = require('wikijs').default;
 
 async function classify(text) {
     // Imports the Google Cloud client library
@@ -15,7 +16,7 @@ async function classify(text) {
 
     // Detects the sentiment of the text
     try {
-        const [classification] = await client.classifyText({ document });        
+        const [classification] = await client.classifyText({ document });
     } catch (error) {
         return {
             category: "unknown",
@@ -51,3 +52,8 @@ exports.productClassification = async (event, context) => {
 
     await pClassifications;
 };
+
+async function getWikipedia(article) {
+    var p = await wiki({apiUrl: 'https://de.wikipedia.org/w/api.php'}).page(article)
+    return p.summary()
+}

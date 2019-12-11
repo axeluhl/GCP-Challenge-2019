@@ -11,7 +11,7 @@ const options = {
 const bigquery = new BigQuery(options);
 
 function errorHandling(e) {
-    console.warn("error inserting data", e.errors.map((row) => row.errors))
+    console.warn("error inserting data", e)
 }
 
 
@@ -19,13 +19,13 @@ async function insertRowsAsStream(data) {
     await bigquery
         .dataset(datasetId)
         .table(tableId)
-        .insert([]).then(() => {
+        .insert(data).then(() => {
             console.log(`Inserted ${data.items.length} rows`);
         }).catch(errorHandling)
 }
 
 function transformData(data) {
-    data.items.map((row) => {
+    return data.items.map((row) => {
             return {
                 date: data.date,
                 store: data.store,
@@ -43,6 +43,7 @@ exports.classificationCollector = (event, context) => {
     const pubsubMessage = event.data;
     const data = JSON.parse(Buffer.from(pubsubMessage, 'base64').toString());
 
-    console.log(data, transformData(data));
+    console.log("INPUT", data);
+    console.log("TRANSFORMED", transformData(data));
     insertRowsAsStream(transformData(data));
 };
